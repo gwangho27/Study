@@ -1,9 +1,12 @@
-package com.gh.config.jwt;
+package com.gh.config.security.jwt;
 
+import com.gh.services.common.domain.User;
 import com.gh.services.users.domain.Users;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -26,19 +29,21 @@ public class JwtUtil {
      * @Param Users loginUser -> Authentication authentication
      *
      */
-    public String generateJwtToken(Users loginUser) {
+    public String generateJwtToken(Authentication authentication) {
+        User userPrincipal = (User) authentication.getPrincipal();
+
         Map<String, Object > header = new HashMap<>();
         header.put("type", "jwt");
         header.put("alg", "HS256");
 
         Map<String, Object> payloads = new HashMap<>();
 
-        payloads.put("id", loginUser.getId());
-        payloads.put("username", loginUser.getUsername());
+        payloads.put("id", userPrincipal.getId());
+        payloads.put("username", userPrincipal.getUsername());
 
         return Jwts.builder()
                 .setHeader(header)
-                .setSubject(loginUser.getUsername())
+                .setSubject(userPrincipal.getUsername())
                 .setClaims(payloads)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expirationMs))

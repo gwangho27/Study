@@ -1,5 +1,6 @@
 package com.gh.services.users.repository;
 
+import com.gh.services.users.domain.QUsers;
 import com.gh.services.users.domain.Users;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -15,5 +16,11 @@ public class UsersQueryRepository extends QuerydslRepositorySupport {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
+    public Users findByUsername (String username) {
+        return jpaQueryFactory
+                .select(QUsers.users)
+                .from(QUsers.users)
+                .where(QUsers.users.username.eq(username)).fetchOne();
+    }
 
 }

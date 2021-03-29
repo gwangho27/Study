@@ -1,9 +1,12 @@
 package com.gh.services.users.service;
 
+import com.gh.services.common.domain.User;
 import com.gh.services.users.domain.AccessHistory;
+import com.gh.services.users.domain.Users;
 import com.gh.services.users.repository.AccessHistoryRepository;
 import com.gh.services.users.repository.UsersQueryRepository;
 import com.gh.services.users.repository.UsersRepository;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,4 +24,13 @@ public class UsersService {
         this.usersRepository = usersRepository;
     }
 
+    public User findByUsername (String username) {
+
+        Users user = usersQueryRepository.findByUsername(username);
+        return new User(user.getId(),user.getUsername(),user.getPassword());
+    }
+
+    public String getStorePassword (User user) {
+        return usersRepository.findById(user.getId()).get().getPassword();
+    }
 }

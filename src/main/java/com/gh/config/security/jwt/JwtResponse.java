@@ -1,6 +1,7 @@
-package com.gh.config.jwt;
+package com.gh.config.security.jwt;
 
 
+import com.gh.config.security.Role;
 import lombok.Builder;
 
 import java.util.List;
@@ -11,9 +12,6 @@ public class JwtResponse {
     private Long id;
     private String username;
     private int state;
-    /**
-     * user role 추가하기
-     */
     private List<String> roles;
 
     @Builder
@@ -21,7 +19,7 @@ public class JwtResponse {
                        Long id,
                        String username,
                        int state,
-                       List<String> roles ){
+                        List<String> roles ){
         this.token = token;
         this.id = id;
         this.username = username;
