@@ -33,4 +33,8 @@ public class UsersService {
     public String getStorePassword (User user) {
         return usersRepository.findById(user.getId()).get().getPassword();
     }
+
+    public Users insertUser (Users user) {
+        return usersRepository.save(user);
+    }
 }
