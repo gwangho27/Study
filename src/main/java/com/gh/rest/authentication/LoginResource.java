@@ -10,7 +10,9 @@ import com.gh.services.users.service.UsersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,4 +38,27 @@ public class LoginResource {
         this.jwtUtil = jwtUtil;
     }
 
+    @PostMapping(value="login")
+    public ResponseEntity<?> login (User loginUser) {
+
+        UsernamePasswordAuthenticationToken authRequest =
+                new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword());
+        Authentication authenticate = authenticationProvider.authenticate(authRequest);
+
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(authenticate);
+        String jwt = jwtUtil.generateJwtToken(authenticate);
+        User user = (User) authenticate.getPrincipal();
+
+        List<String> role = user.getAuthorities()
+                .stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new JwtResponse(jwt,
+                                                user.getId(),
+                                                user.getUsername(),
+                                                200,
+                                                role));
+    }
 }
