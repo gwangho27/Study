@@ -23,8 +23,8 @@ public class JoinResource {
         this.encoder = encoder;
     }
 
-    // 먼가 더 고칠거야
-    @PostMapping(value="")
+
+    @PostMapping(value="/join")
     public ResponseEntity<?> join (Users user) {
         HashMap <String, Object> insertInfo = new HashMap<String, Object> ();
         user.setPassword(encoder.encode(user.getPassword()));

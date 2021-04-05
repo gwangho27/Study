@@ -20,9 +20,12 @@ public class Users {
     private String username;  // id
     private String password;  // pw
 
-    private LocalDateTime updateDT;
-    private LocalDateTime deleteDT;
-
     @OneToMany(mappedBy = "users")
     private List<AccessHistory> accessHistory ;
+
+    public Users () {}
+
+    public Users (Long id ){
+        this.id = id;
+    }
 }

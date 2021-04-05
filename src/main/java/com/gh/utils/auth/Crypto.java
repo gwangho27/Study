@@ -10,7 +10,9 @@ public class Crypto {
     public static String sha256(String string){
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(string.getBytes("UTF-8"));
+            byte[] saltBytes = new byte[string.getBytes("UTF-8").length
+                    + string.getBytes("UTF-8").length];
+            byte[] hash = digest.digest(saltBytes);
             StringBuffer hexString = new StringBuffer();
 
             for(int i=0;i<hash.length;i++) {

@@ -1,9 +1,6 @@
 package com.gh.services.users.domain;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,4 +21,9 @@ public class AccessHistory {
     @ManyToOne
     @JoinColumn(name="USERS_ID")
     private Users users;
+
+    @Builder
+    public AccessHistory(Users users) {
+        this.users = users;
+    }
 }

@@ -5,6 +5,7 @@ import com.gh.config.security.ShaPasswordEncoder;
 import com.gh.config.security.jwt.JwtResponse;
 import com.gh.config.security.jwt.JwtUtil;
 import com.gh.services.common.domain.User;
+import com.gh.services.users.domain.AccessHistory;
 import com.gh.services.users.domain.Users;
 import com.gh.services.users.service.UsersService;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,17 +24,18 @@ public class LoginResource {
 
     private final CustomAuthenticationProvider authenticationProvider ;
     private final JwtUtil jwtUtil;
-
+    private final UsersService usersService;
     public LoginResource(CustomAuthenticationProvider authenticationProvider,
                          JwtUtil jwtUtil,
                          UsersService usersService,
                          ShaPasswordEncoder passwordEncoder) {
         this.authenticationProvider = authenticationProvider;
+        this.usersService = usersService;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping(value="login")
-    public ResponseEntity<?> login (User loginUser) {
+    public ResponseEntity<?> login (@RequestBody User loginUser) {
 
         UsernamePasswordAuthenticationToken authRequest =
                 new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword());
@@ -55,10 +51,18 @@ public class LoginResource {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                                                user.getId(),
-                                                user.getUsername(),
-                                                200,
-                                                role));
+        AccessHistory saveHistory = usersService.insertAccessHistory(
+                AccessHistory.builder()
+                .users(new Users(user.getId()))
+                .build());
+
+        return ResponseEntity.ok(
+                JwtResponse.
+                        builder()
+                        .token(jwt)
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .roles(role)
+                        .state(200).build());
     }
 }

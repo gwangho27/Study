@@ -4,7 +4,6 @@ import com.gh.config.security.Role;
 import com.gh.utils.auth.AuthoritiesUtils;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;

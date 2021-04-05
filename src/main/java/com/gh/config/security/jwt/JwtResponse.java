@@ -3,9 +3,11 @@ package com.gh.config.security.jwt;
 
 import com.gh.config.security.Role;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class JwtResponse {
 
     private String token ;

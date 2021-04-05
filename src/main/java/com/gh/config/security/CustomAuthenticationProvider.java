@@ -55,7 +55,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if(!encoder.matches(password, StorePassword)) {
             throw new BadCredentialsException("Invalid password");
         }
-        Collection<? extends GrantedAuthority> authorities = AuthoritiesUtils.createAuthorities(user);
+        Collection<? extends GrantedAuthority> authorities = AuthoritiesUtils.createAuthorities(findUser);
         findUser.setAuthorities(authorities);
 
         findUser.setPassword("");

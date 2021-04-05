@@ -25,7 +25,6 @@ public class UsersService {
     }
 
     public User findByUsername (String username) {
-
         Users user = usersQueryRepository.findByUsername(username);
         return new User(user.getId(),user.getUsername(),user.getPassword());
     }
@@ -36,5 +35,9 @@ public class UsersService {
 
     public Users insertUser (Users user) {
         return usersRepository.save(user);
+    }
+
+    public AccessHistory insertAccessHistory(AccessHistory accessHistory){
+        return accessHistoryRepository.save(accessHistory);
     }
 }

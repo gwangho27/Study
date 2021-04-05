@@ -20,7 +20,7 @@ public class EmbeddedRedisConfiguration {
 
     @PostConstruct
     public void redisServer() {
-        redisServer.start();
+//        redisServer.start();
     }
 
     @PreDestroy
