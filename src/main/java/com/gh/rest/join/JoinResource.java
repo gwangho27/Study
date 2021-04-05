@@ -5,6 +5,7 @@ import com.gh.services.users.domain.Users;
 import com.gh.services.users.service.UsersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class JoinResource {
 
 
     @PostMapping(value="/join")
-    public ResponseEntity<?> join (Users user) {
+    public ResponseEntity<?> join (@RequestBody Users user) {
         HashMap <String, Object> insertInfo = new HashMap<String, Object> ();
         user.setPassword(encoder.encode(user.getPassword()));
         user = usersService.insertUser(user);
