@@ -32,22 +32,11 @@ public class JwtUtil {
     public String generateJwtToken(Authentication authentication) {
         User userPrincipal = (User) authentication.getPrincipal();
 
-        Map<String, Object > header = new HashMap<>();
-        header.put("type", "jwt");
-        header.put("alg", "HS256");
-
-        Map<String, Object> payloads = new HashMap<>();
-
-        payloads.put("id", userPrincipal.getId());
-        payloads.put("username", userPrincipal.getUsername());
-
         return Jwts.builder()
-                .setHeader(header)
                 .setSubject(userPrincipal.getUsername())
-                .setClaims(payloads)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expirationMs))
-                .signWith(SignatureAlgorithm.HS256, key.getBytes())
+                .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
     }
 

@@ -12,9 +12,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Configuration
+@EnableRedisHttpSession
 public class RedisConfiguration {
 
     @Value("${spring.redis.port}")
@@ -22,29 +24,12 @@ public class RedisConfiguration {
 
     @Value("${spring.redis.host}")
     private String redisHost;
-    /*
+
     @Value("${spring.redis.password}")
     private String redisPassword;
-    */
-    /**
-     *  Embedded Redis
-     */
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory () {
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisHost,redisPort));
-    }
-
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate () {
-        RedisTemplate <?, ?> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        return redisTemplate;
-    }
-
     /**
      *  Redis
      **/
-    /*
     @Bean
     public RedisConnectionFactory redisConnectionFactory () {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -63,6 +48,23 @@ public class RedisConfiguration {
 
         return redisTemplate;
     }
-    */
+
+    /**
+     *  Embedded Redis
+     */
+    /*
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory () {
+        return new LettuceConnectionFactory(new RedisStandaloneConfiguration(redisHost,redisPort));
+    }
+
+    @Bean
+    public RedisTemplate<?, ?> redisTemplate () {
+        RedisTemplate <?, ?> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        return redisTemplate;
+    }
+*/
+
 
 }
